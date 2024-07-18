@@ -1,5 +1,5 @@
 import { promises, unlink } from 'fs-extra'
-import SpotifyApi, { IAuth, UserObjectPublic } from './lib/API'
+import SpotifyApi, { IAuth, TopTrackDetails, UserObjectPublic } from './lib/API'
 import Artist from './lib/details/Atrist'
 import Playlist from './lib/details/Playlist'
 import SongDetails from './lib/details/Track'
@@ -66,6 +66,20 @@ export default class SpotifyFetcher extends SpotifyApi {
             albums: albumInfos,
             artist: artistResult
         }
+    }
+
+    /**
+     * Gets the list of Top Tracks from the given Artists URL
+     * @param url
+     * @returns {string[]} having the uri of the tracks
+     */
+    getTopTracksArtist = async (
+        url: string
+    ) => {
+        await this.verifyCredentials()
+        const artistResult = await this.getArtist(url)
+        const topTracks = (await this.getTopTracksByArtist(artistResult.id))
+        return topTracks.body.tracks.map((track) => track.album.uri)
     }
 
     /**
