@@ -123,6 +123,10 @@ export default class SpotifyApi {
         await this.verifyCredentials()
         return (await this.spotifyAPI.getUser(id)) as UserObjectPublic
     }
+    getTopTracksByArtist = async(url:string) =>{
+        await this.verifyCredentials()
+        return (await this.spotifyAPI.getArtistTopTracks(url,'IN')) as unknown as TopTrackDetails
+    }
 }
 
 export interface IAuth {
@@ -130,6 +134,11 @@ export interface IAuth {
     clientSecret: string
 }
 
+export interface TopTrackDetails {
+    body:{
+        tracks: SpotifyApi.TrackObjectFull[]
+    }
+}
 interface ClientCredentialsGrantResponseEX {
     access_token: string
     expires_in: number
